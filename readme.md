@@ -7,6 +7,5 @@ Some minor changes were required from this source code to remove the use of priv
 
 #### Known Issues: ####
 
-1). Adding certain Widgets will cause a crash. For example, try adding the 3x3 Messaging Widget. 
+1). Adding certain Widgets will cause a NullPointerException. For example, try adding the stock "3x3 Messaging" widget on a Galaxy Nexus. 
 
-2). Adding certain Widgets will not work. For example, try adding the 3x3 Gmail widget. This will appear to work, with the permission dialog displaying, and the Gmail app loading so you can select the account and folder to display. However, once that selection is made, the widget fails to appear, and the App Drawer comes back on screen. 
