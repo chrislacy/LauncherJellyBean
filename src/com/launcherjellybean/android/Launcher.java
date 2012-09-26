@@ -1652,24 +1652,41 @@ public final class Launcher extends Activity
         }
 
         AppWidgetHostView hostView = info.boundWidget;
-        
-        if (hostView != null) {
-        	lastAppWidgetId = hostView.getAppWidgetId();
-            addAppWidgetImpl(lastAppWidgetId, info, hostView, info.info);
-        } else {
-            // In this case, we either need to start an activity to get permission to bind
-            // the widget, or we need to start an activity to configure the widget, or both.
-        	lastAppWidgetId = getAppWidgetHost().allocateAppWidgetId();
-            if (mAppWidgetManager.bindAppWidgetIdIfAllowed(lastAppWidgetId, info.componentName)) {
-                addAppWidgetImpl(lastAppWidgetId, info, null, info.info);
-            } else {
-                mPendingAddWidgetInfo = info.info;
-                Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_BIND);
-                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, lastAppWidgetId);
-                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER, info.componentName);
-                startActivityForResult(intent, REQUEST_BIND_APPWIDGET);
-            }
-        }
+		if (hostView != null) {
+			lastAppWidgetId = hostView.getAppWidgetId();
+			// In this case, we either need to start an activity to get permission to bind 
+			// the widget, or we need to start an activity to configure the widget, or both.
+			if (mAppWidgetManager.bindAppWidgetIdIfAllowed(lastAppWidgetId,
+					info.componentName)) {
+				addAppWidgetImpl(lastAppWidgetId, info, hostView, info.info);
+			} else {
+				mPendingAddWidgetInfo = info.info;
+				Intent intent = new Intent(
+						AppWidgetManager.ACTION_APPWIDGET_BIND);
+				intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+						lastAppWidgetId);
+				intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER,
+						info.componentName);
+				startActivityForResult(intent, REQUEST_BIND_APPWIDGET);
+			}
+		} else {
+			lastAppWidgetId = getAppWidgetHost().allocateAppWidgetId();
+			// In this case, we either need to start an activity to get permission to bind 
+			// the widget, or we need to start an activity to configure the widget, or both.
+			if (mAppWidgetManager.bindAppWidgetIdIfAllowed(lastAppWidgetId,
+					info.componentName)) {
+				addAppWidgetImpl(lastAppWidgetId, info, null, info.info);
+			} else {
+				mPendingAddWidgetInfo = info.info;
+				Intent intent = new Intent(
+						AppWidgetManager.ACTION_APPWIDGET_BIND);
+				intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+						lastAppWidgetId);
+				intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER,
+						info.componentName);
+				startActivityForResult(intent, REQUEST_BIND_APPWIDGET);
+			}
+		}
     }
 
     void processShortcut(Intent intent) {
